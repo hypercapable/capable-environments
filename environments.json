@@ -1,0 +1,212 @@
+{
+  "environments": [
+    {
+      "name": "design-campaign-rounds",
+      "title": "Design campaign over several rounds",
+      "family": "Design campaigns",
+      "summary": "Run a retrospective design campaign over one generation of a peptide programme: pick four compounds a round for three rounds, seeing what each pick measured before choosing the next.",
+      "inputs": "Earlier generations with their measured potency, and the current generation's compounds as a pool of candidates with sequences and structures.",
+      "answer": "Four candidates per round, sent to the episode service; each round reveals the picks' measured potency.",
+      "grading": "How close the best pick comes to the pool's most potent compound, as a fraction of the pool's potency range, from 0 to 1.",
+      "data": "in_house",
+      "interaction": "interactive",
+      "tasks": 6,
+      "release": "c4ac5073e5ca",
+      "agent_timeout_min": 30,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org",
+        "the episode service"
+      ]
+    },
+    {
+      "name": "design-round-ranking-peptides",
+      "title": "Design-round ranking: peptides",
+      "family": "Design campaigns",
+      "summary": "A design round from one of our peptide campaigns: rank the round's candidates by the potency they turned out to have.",
+      "inputs": "The parent peptide, every analogue measured before the round with its potency, and the round's candidates as sequences in lab notation. A round is every compound first measured on the same day.",
+      "answer": "A ranking of every candidate, most potent first.",
+      "grading": "Spearman correlation between the ranking and the potency the team measured, from -1 to 1.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 52,
+      "release": "d4e794ac73e4",
+      "agent_timeout_min": 30,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    },
+    {
+      "name": "design-round-ranking-short-peptides",
+      "title": "Design-round ranking: short modified peptides",
+      "family": "Design campaigns",
+      "summary": "A real design round from one of our programmes: rank the round's candidates by the potency they turned out to have.",
+      "inputs": "The parent compound, the objectives the chemists wrote down for the round, every analogue measured before the round with its potency, and the round's candidates as chemical structures only.",
+      "answer": "A ranking of every candidate, most potent first.",
+      "grading": "Spearman correlation between the ranking and the potency the team measured, from -1 to 1.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 16,
+      "release": "f9f231096ceb",
+      "agent_timeout_min": 30,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    },
+    {
+      "name": "mouse-activity-analysis",
+      "title": "Mouse activity analysis",
+      "family": "Lab data analysis",
+      "summary": "Reproduce a mouse study's hourly activity analysis from raw 24/7 home-cage video tracking.",
+      "inputs": "Raw 10-minute sleep bins for every cage in the study, each cage's treatment group and dosing time, and the written analysis method.",
+      "answer": "Percent time active for every mouse in each of the six hours after dosing.",
+      "grading": "The share of mouse-hours within 0.5 percentage points of the approved analysis; a missing or extra mouse-hour counts against.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 13,
+      "release": "495b8eaf19cf",
+      "agent_timeout_min": 60,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    },
+    {
+      "name": "notation-to-structure",
+      "title": "Lab notation to chemical structure",
+      "family": "Lab data analysis",
+      "summary": "Convert a registered peptide written in the lab's shorthand into its exact chemical structure.",
+      "inputs": "The peptide in lab notation: D-residues, N-methylations, side-chain variants, lipidations and caps.",
+      "answer": "The structure as SMILES.",
+      "grading": "1 when the structure matches the registered one exactly (InChIKey of the largest fragment), 0.5 when only the connectivity matches, otherwise 0. Every key structure is confirmed by a vendor certificate's mass or a reviewed reading of the chemist's drawing.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 449,
+      "release": "6d8c14b1584f",
+      "agent_timeout_min": 30,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    },
+    {
+      "name": "raw-assay-curve-fitting",
+      "title": "Raw assay curve fitting",
+      "family": "Lab data analysis",
+      "summary": "Turn one cell assay's raw plate-reader export into compound potencies.",
+      "inputs": "The plate reader's raw export, the plate map and the written assay protocol.",
+      "answer": "A pEC50 for each compound on the plates.",
+      "grading": "The share of key compounds reported within 0.3 log units. The key holds compounds whose curves passed the run's own quality control (R\u00b2 of at least 0.9) and whose value agrees with our registry within 0.3 log units.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 24,
+      "release": "439645f6a765",
+      "agent_timeout_min": 60,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    },
+    {
+      "name": "build-a-potency-model",
+      "title": "Build a potency model",
+      "family": "Potency prediction",
+      "summary": "A long-horizon modelling task: train any model on measured potencies, then rank compounds it has not seen.",
+      "inputs": "train.csv with structures and measured potency, and test.csv with held-out structures. One task comes from one of our peptide programmes (held out by chemical family); five come from public receptor data (held out by source series).",
+      "answer": "A ranking of every test compound, most potent first.",
+      "grading": "Spearman correlation between the ranking and measured potency, from -1 to 1.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 6,
+      "release": "22adc38dad42",
+      "agent_timeout_min": 120,
+      "cpus": 4,
+      "memory_gb": 8.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    },
+    {
+      "name": "held-out-potency-regression",
+      "title": "Held-out potency regression",
+      "family": "Potency prediction",
+      "summary": "Predict the measured potency of a peptide from one of our programmes, held out from every related compound.",
+      "inputs": "One compound's structure and the assay it was measured in. Held-out compounds share no chemical family with the programme's other compounds.",
+      "answer": "One number: the predicted potency as pEC50 (-log10 molar).",
+      "grading": "The negative absolute error in log units for each task; Spearman correlation across all tasks.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 70,
+      "release": "1e4d93af0f16",
+      "agent_timeout_min": 30,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    },
+    {
+      "name": "pairwise-potency-in-context",
+      "title": "Pairwise potency in context",
+      "family": "Potency prediction",
+      "summary": "Two analogues from one of our peptide programmes, measured side by side in the same assay: say which is more potent and by how much.",
+      "inputs": "Both peptides' sequences and structures, the assay they were measured in, and reference compounds from the programme's earlier design generations with their measured potency.",
+      "answer": "Which compound is more potent (A or B) and a five-level rating of the potency ratio: B over 30-fold more potent, B at least 3-fold more potent, within 3-fold, A at least 3-fold more potent, A over 30-fold more potent.",
+      "grading": "1 when the more potent compound is named correctly, otherwise 0; the rating's accuracy is reported alongside.",
+      "data": "in_house",
+      "interaction": "single answer",
+      "tasks": 30,
+      "release": "9acc90f2e946",
+      "agent_timeout_min": 30,
+      "cpus": 2,
+      "memory_gb": 4.0,
+      "network": [
+        "api.anthropic.com",
+        "api.openai.com",
+        "openrouter.ai",
+        "pypi.org",
+        "files.pythonhosted.org"
+      ]
+    }
+  ]
+}
